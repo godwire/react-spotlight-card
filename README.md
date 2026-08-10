@@ -22,12 +22,12 @@ straight to CSS custom properties on the DOM node via a `ref`, and a radial
 gradient that reads them. No React state updates while the mouse moves, so
 it stays smooth even in a grid of many cards.
 
-- 📦 **Zero runtime dependencies** — only `react`/`react-dom` as peers
-- ⚡ **No re-renders on mousemove** — position updates bypass React state entirely
-- 🎨 **Fully themeable** — color, size, border glow, and transition speed are all props
-- 🧩 **Framework-agnostic styling** — plain CSS, works with or without Tailwind
-- 📐 **TypeScript** — full type definitions included
-- 🪶 **Small** — see the bundle size badge above
+- **Zero runtime dependencies** — only `react`/`react-dom` as peers
+- **No re-renders on mousemove** — position updates bypass React state entirely
+- **Fully themeable** — color, size, border glow, and transition speed are all props
+- **Framework-agnostic styling** — plain CSS, works with or without Tailwind
+- **TypeScript** — full type definitions included
+- **Small** — see the bundle size badge above
 
 ## Install
 
