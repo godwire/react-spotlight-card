@@ -11,8 +11,6 @@ Tailwind, no Framer Motion, no animation library required.
 
 ## Demo
 
-**🔗 Live link:** _coming soon — see "Deploying the demo" below_
-
 ![demo](demonstration.gif)
 
 ## Why
