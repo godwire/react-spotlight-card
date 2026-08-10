@@ -1,0 +1,86 @@
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0a0a0f;
+  color: #e5e7eb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 64px 24px 96px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.hero h1 {
+  font-size: 36px;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, #a78bfa, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero p {
+  color: #9ca3af;
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.demo-card {
+  background: #131318;
+  border: 1px solid #232330;
+  padding: 28px 24px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  cursor: default;
+}
+
+.demo-card h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #f3f4f6;
+}
+
+.demo-card code {
+  font-size: 13px;
+  color: #8b8b99;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+footer {
+  text-align: center;
+  margin-top: 64px;
+}
+
+footer a {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+footer a:hover {
+  color: #e5e7eb;
+}

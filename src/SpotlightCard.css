@@ -1,0 +1,48 @@
+.rsc-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--rsc-radius, 16px);
+}
+
+.rsc-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--rsc-opacity, 0);
+  transition: opacity var(--rsc-duration, 300ms) ease;
+  background: radial-gradient(
+    var(--rsc-size, 300px) circle at var(--rsc-x, 50%) var(--rsc-y, 50%),
+    var(--rsc-color, rgba(255, 255, 255, 0.2)),
+    transparent 80%
+  );
+}
+
+/* Glowing border: a gradient ring, masked down to just the 1px border area. */
+.rsc-border-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--rsc-opacity, 0);
+  transition: opacity var(--rsc-duration, 300ms) ease;
+  background: radial-gradient(
+    var(--rsc-size, 300px) circle at var(--rsc-x, 50%) var(--rsc-y, 50%),
+    var(--rsc-color, rgba(255, 255, 255, 0.5)),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.rsc-content {
+  position: relative;
+  z-index: 3;
+}
