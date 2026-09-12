@@ -1,6 +1,8 @@
 # react-spotlight-card
 
+[![Live demo](https://img.shields.io/badge/demo-live-a78bfa?logo=vercel&logoColor=white)](https://react-spotlight-card-demo.vercel.app)
 [![npm version](https://img.shields.io/npm/v/react-spotlight-card.svg)](https://www.npmjs.com/package/react-spotlight-card)
+[![npm downloads](https://img.shields.io/npm/dm/react-spotlight-card.svg)](https://www.npmjs.com/package/react-spotlight-card)
 [![CI](https://github.com/godwire/react-spotlight-card/actions/workflows/ci.yml/badge.svg)](https://github.com/godwire/react-spotlight-card/actions/workflows/ci.yml)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/react-spotlight-card)](https://bundlephobia.com/package/react-spotlight-card)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -10,9 +12,8 @@ border. One component, about 1 kB gzipped, nothing in `dependencies`.
 
 ![The playground: a spotlight card on the left, the JSX it produces on the right, and a panel of every prop underneath](https://raw.githubusercontent.com/godwire/react-spotlight-card/main/demo.png)
 
-**[Try it live]([react-spotlight-card-demo.vercel.app](https://react-spotlight-card-demo.vercel.app))** — change any prop and
+**[Try it live](https://react-spotlight-card-demo.vercel.app)** — change any prop and
 watch both the card and the code follow.
-
 ## Install
 
 ```bash
