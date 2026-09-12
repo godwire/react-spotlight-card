@@ -10,7 +10,7 @@ border. One component, about 1 kB gzipped, nothing in `dependencies`.
 
 ![The playground: a spotlight card on the left, the JSX it produces on the right, and a panel of every prop underneath](https://raw.githubusercontent.com/godwire/react-spotlight-card/main/demo.png)
 
-**[Try it live](https://react-spotlight-card.vercel.app)** — change any prop and
+**[Try it live](react-spotlight-card-demo.vercel.app)** — change any prop and
 watch both the card and the code follow.
 
 ## Install
