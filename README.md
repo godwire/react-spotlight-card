@@ -10,10 +10,11 @@
 A React card with a cursor-tracking spotlight glow and an optional glowing
 border. One component, about 1 kB gzipped, nothing in `dependencies`.
 
-![The playground: a spotlight card on the left, the JSX it produces on the right, and a panel of every prop underneath](https://raw.githubusercontent.com/godwire/react-spotlight-card/main/demo.png)
+[![The playground: a spotlight card on the left, the JSX it produces on the right, and a panel of every prop underneath](https://raw.githubusercontent.com/godwire/react-spotlight-card/main/demo.png)](https://react-spotlight-card-demo.vercel.app)
 
-**[Try it live](https://react-spotlight-card-demo.vercel.app)** — change any prop and
-watch both the card and the code follow.
+**[Try it live](https://react-spotlight-card-demo.vercel.app)** — change any
+prop and watch both the card and the code follow.
+
 ## Install
 
 ```bash
@@ -106,6 +107,11 @@ your own CSS if you prefer that to props:
 
 Anyone who has asked their system to reduce motion gets the glow without the
 fade; the stylesheet handles that.
+
+## Compatibility
+
+React 17, 18 and 19. Tested against React 19; `peerDependencies` allows
+`>=17.0.0`.
 
 ## TypeScript
 

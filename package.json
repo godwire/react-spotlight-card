@@ -40,13 +40,13 @@
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.0.1",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@testing-library/react": "^16.1.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.1",
     "jsdom": "^25.0.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "typescript": "^5.5.4",
     "vite": "^5.4.1",
     "vite-plugin-dts": "^4.0.3",
@@ -57,9 +57,13 @@
     "react-component",
     "card",
     "spotlight",
+    "spotlight-card",
     "glow",
+    "glow-card",
     "hover-effect",
+    "hover-card",
     "cursor",
+    "cursor-tracking",
     "ui"
   ],
   "author": "godwire",
@@ -71,7 +75,7 @@
   "bugs": {
     "url": "https://github.com/godwire/react-spotlight-card/issues"
   },
-  "homepage": "https://github.com/godwire/react-spotlight-card#readme",
+  "homepage": "https://react-spotlight-card-demo.vercel.app",
   "allowScripts": {
     "esbuild@0.21.5": true
   }
