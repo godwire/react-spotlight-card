@@ -19,16 +19,25 @@ jobs:
           cache: "npm"
 
       - name: Install library dependencies
-        run: npm install
+        run: npm ci
 
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Test
+        run: npm test
+
       - name: Build library
         run: npm run build
 
+      # Catches the mistake that is invisible until someone installs the
+      # package: source, tests or the example app leaking into the tarball,
+      # or dist/ missing from it entirely.
+      - name: Inspect the tarball that would be published
+        run: npm pack --dry-run
+
       - name: Install example dependencies
-        run: npm install
+        run: npm ci || npm install
         working-directory: example
 
       - name: Build example

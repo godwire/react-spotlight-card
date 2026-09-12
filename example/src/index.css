@@ -1,5 +1,16 @@
 :root {
   color-scheme: dark;
+  --bg: #0a0a0f;
+  --panel: #101017;
+  --panel-2: #16161f;
+  --line: #232330;
+  --line-2: #34344a;
+  --text: #e5e7eb;
+  --dim: #8b8b99;
+  --faint: #6b6b7d;
+  --accent: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.16);
+  --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 }
 
 * {
@@ -8,25 +19,34 @@
 
 body {
   margin: 0;
-  background: #0a0a0f;
-  color: #e5e7eb;
+  background: var(--bg);
+  color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-.page {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 64px 24px 96px;
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 44px 24px 72px;
+}
+
+/* ---------- header ---------- */
 
 .hero {
   text-align: center;
-  margin-bottom: 56px;
+  margin-bottom: 24px;
 }
 
 .hero h1 {
-  font-size: 36px;
-  margin-bottom: 12px;
+  font-size: 32px;
+  margin: 0 0 12px;
+  font-family: var(--mono);
+  letter-spacing: -0.02em;
   background: linear-gradient(90deg, #a78bfa, #60a5fa);
   -webkit-background-clip: text;
   background-clip: text;
@@ -34,53 +54,483 @@ body {
 }
 
 .hero p {
-  color: #9ca3af;
-  max-width: 560px;
+  color: var(--dim);
+  max-width: 60ch;
   margin: 0 auto;
   line-height: 1.6;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+.install {
+  margin-top: 18px;
 }
 
-.demo-card {
-  background: #131318;
-  border: 1px solid #232330;
-  padding: 28px 24px;
-  min-height: 140px;
+.install code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 14px;
+  display: inline-block;
+}
+
+/*
+  The card and the code it produces are pinned side by side at the top; the
+  controls run full width underneath and scroll past them. Nothing you touch
+  can push the result out of view.
+*/
+
+.playground {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    'stage code'
+    'controls controls';
+  gap: 16px;
+  align-items: start;
+}
+
+.stage {
+  grid-area: stage;
+}
+
+.code {
+  grid-area: code;
+}
+
+.controls {
+  grid-area: controls;
+  margin-top: 8px;
+}
+
+.stage,
+.code {
+  position: sticky;
+  top: 16px;
+  z-index: 3;
+}
+
+/* The sticky band needs an opaque backdrop or the controls show through it. */
+.stage::before,
+.code::before {
+  content: '';
+  position: absolute;
+  inset: -16px -8px -8px;
+  background: var(--bg);
+  z-index: -1;
+}
+
+@media (max-width: 880px) {
+  .playground {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'stage'
+      'controls'
+      'code';
+  }
+
+  .stage {
+    top: 0;
+  }
+
+  .stage::before {
+    inset: -10px -24px -8px;
+  }
+
+  .stage-card {
+    min-height: 160px;
+    padding: 22px 20px;
+  }
+
+  /* Too tall to pin on a phone, so it lives at the bottom instead. */
+  .code {
+    position: static;
+  }
+
+  .code::before {
+    display: none;
+  }
+}
+
+/* ---------- the card ---------- */
+
+.stage-card {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  padding: 34px 30px;
+  min-height: 232px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.stage-card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.stage-note {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--accent);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ---------- shared panel chrome ---------- */
+
+.controls,
+.code {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--dim);
+}
+
+.head-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.ghost {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--dim);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ghost:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--line-2);
+}
+
+.ghost:disabled {
+  opacity: 0.35;
   cursor: default;
 }
 
-.demo-card h3 {
-  margin: 0;
-  font-size: 17px;
-  color: #f3f4f6;
+.ghost.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: #ded3ff;
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.22);
 }
 
-.demo-card code {
-  font-size: 13px;
-  color: #8b8b99;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+/* ---------- presets ---------- */
+
+.presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
 }
+
+.preset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.preset:hover {
+  border-color: var(--line-2);
+}
+
+.preset strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.preset span {
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.preset.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.35), 0 0 18px rgba(167, 139, 250, 0.22);
+}
+
+.preset.on strong {
+  color: #ded3ff;
+}
+
+.preset.on span {
+  color: var(--accent);
+}
+
+.preset:active {
+  transform: translateY(1px);
+}
+
+/* ---------- groups of controls ---------- */
+
+.group {
+  padding: 16px 16px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.group:last-child {
+  border-bottom: none;
+  padding-bottom: 16px;
+}
+
+.group-title {
+  margin: 0 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--faint);
+  letter-spacing: 0.04em;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.control {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 12px 13px;
+}
+
+.control.is-changed {
+  border-color: rgba(167, 139, 250, 0.5);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.control-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.control-head label {
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.control-head .value {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--dim);
+}
+
+.control.is-changed .control-head label,
+.control.is-changed .control-head .value {
+  color: var(--accent);
+}
+
+.reset {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.reset:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.help {
+  margin: 9px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--faint);
+}
+
+/* ---------- option buttons ---------- */
+
+.opts {
+  display: flex;
+  gap: 4px;
+}
+
+.opt {
+  position: relative;
+  flex: 1;
+  background: #10101a;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 4px;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: box-shadow 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.opt:hover {
+  color: var(--text);
+  border-color: var(--line-2);
+}
+
+.opt.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: #ded3ff;
+  font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.4), 0 0 16px rgba(167, 139, 250, 0.28);
+}
+
+.opt:active {
+  transform: translateY(1px);
+}
+
+/* The small mark under an option means "this one is the default". */
+.dot {
+  position: absolute;
+  left: 50%;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  margin-left: -1.5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+input[type='range'] {
+  width: 100%;
+  margin-top: 10px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.text-input {
+  width: 100%;
+  margin-top: 8px;
+  background: #10101a;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 10px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.swatches {
+  display: flex;
+  gap: 5px;
+}
+
+.swatch {
+  flex: 1;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  padding: 0;
+  transition: box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.swatch.on {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.45), 0 0 16px rgba(167, 139, 250, 0.35);
+}
+
+.swatch:active {
+  transform: translateY(1px);
+}
+
+/* ---------- code ---------- */
+
+.code pre {
+  margin: 0;
+  padding: 14px 18px;
+  overflow: auto;
+  max-height: 232px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+.code .tag {
+  color: #7dd3fc;
+}
+
+.code .attr {
+  color: var(--dim);
+}
+
+.code .attr.lit {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.code .muted {
+  color: #56566a;
+}
+
+/* ---------- footer ---------- */
 
 footer {
   text-align: center;
-  margin-top: 64px;
+  margin-top: 44px;
 }
 
 footer a {
-  color: #9ca3af;
+  color: var(--dim);
   text-decoration: none;
   font-size: 14px;
 }
 
 footer a:hover {
-  color: #e5e7eb;
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opt,
+  .preset,
+  .swatch {
+    transition: none;
+  }
+
+  .opt:active,
+  .preset:active,
+  .swatch:active {
+    transform: none;
+  }
 }

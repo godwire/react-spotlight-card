@@ -1,0 +1,38 @@
+name: Release
+
+# Publishing from CI rather than a laptop buys two things: the tarball is
+# always built from the committed source, and npm attaches a provenance
+# attestation linking the package to this exact commit and workflow run.
+#
+# Setup, once:
+#   1. npm token (Automation type) -> repo Settings > Secrets > NPM_TOKEN
+#   2. npm version patch|minor|major   # commits and tags
+#   3. git push --follow-tags
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for provenance
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+          cache: "npm"
+
+      - run: npm ci
+
+      # prepublishOnly runs typecheck + test + build, so a broken commit
+      # cannot become a published version.
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

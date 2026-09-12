@@ -5,29 +5,13 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/react-spotlight-card)](https://bundlephobia.com/package/react-spotlight-card)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-A lightweight React card component with a cursor-tracking spotlight glow and
-an optional glowing border — **zero dependencies beyond React itself**. No
-Tailwind, no Framer Motion, no animation library required.
+A React card with a cursor-tracking spotlight glow and an optional glowing
+border. One component, about 1 kB gzipped, nothing in `dependencies`.
 
-## Demo
+![The playground: a spotlight card on the left, the JSX it produces on the right, and a panel of every prop underneath](https://raw.githubusercontent.com/godwire/react-spotlight-card/main/demo.png)
 
-![demo](demonstration.gif)
-
-## Why
-
-Most "spotlight card" effects come bundled with a whole design system —
-Tailwind config, Framer Motion, sometimes both. This one is a single
-component: one `pointermove` listener that writes the cursor position
-straight to CSS custom properties on the DOM node via a `ref`, and a radial
-gradient that reads them. No React state updates while the mouse moves, so
-it stays smooth even in a grid of many cards.
-
-- **Zero runtime dependencies** — only `react`/`react-dom` as peers
-- **No re-renders on mousemove** — position updates bypass React state entirely
-- **Fully themeable** — color, size, border glow, and transition speed are all props
-- **Framework-agnostic styling** — plain CSS, works with or without Tailwind
-- **TypeScript** — full type definitions included
-- **Small** — see the bundle size badge above
+**[Try it live](https://react-spotlight-card.vercel.app)** — change any prop and
+watch both the card and the code follow.
 
 ## Install
 
@@ -51,21 +35,85 @@ function Example() {
 }
 ```
 
+The stylesheet import is not optional. Without it the card renders, takes up
+space, and produces no glow at all — if that is what you are seeing, this line
+is the reason.
+
+## Why
+
+Most spotlight-card effects arrive with a design system attached: a Tailwind
+config, Framer Motion, often both. This one is a single component.
+
+The cursor position is written straight to CSS custom properties on the DOM
+node through a ref, and a radial gradient reads them. No React state changes
+while the pointer moves, or on enter and leave — so the component never
+re-renders at all during the effect, and a grid of a hundred cards stays
+smooth.
+
 ## Props
+
+Every prop a `<div>` accepts is forwarded, so the card can be clickable,
+labelled, or carry data attributes. `ref` gives you the outer element.
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `children` | `ReactNode` | — | Card content |
-| `className` | `string` | `''` | Extra class name(s) on the outer element |
-| `style` | `CSSProperties` | — | Inline styles, merged with the component's own CSS variables |
-| `spotlightColor` | `string` | `'rgba(255, 255, 255, 0.20)'` | Any valid CSS color, including `rgba()` for opacity |
+| `spotlightColor` | `string` | `'rgba(255, 255, 255, 0.20)'` | Any CSS color. The alpha is what controls how strong the glow reads |
 | `spotlightSize` | `number` | `300` | Diameter of the glow, in pixels |
-| `borderGlow` | `boolean` | `true` | Also render a glowing gradient border that follows the cursor |
-| `transitionDuration` | `number` | `300` | Fade in/out duration in milliseconds |
+| `borderGlow` | `boolean` | `true` | Draws a second glow along the border, masked to a 1px ring |
+| `transitionDuration` | `number` | `300` | Fade in/out duration, in milliseconds |
+| `radius` | `number \| string` | `16` | Corner radius. A number is treated as pixels |
+| `leaveBehavior` | `'fade' \| 'instant' \| 'follow'` | `'fade'` | What the glow does once the cursor leaves — see below |
+| `enableTouch` | `boolean` | `false` | React to touch as well as mouse and pen |
+| `disabled` | `boolean` | `false` | Render without any glow, keeping layout identical |
+| `className` | `string` | `''` | Added to the outer element |
+| `style` | `CSSProperties` | — | Merged with the component's own custom properties |
 
-The component renders a plain `<div>` with your `children` inside — it
-doesn't impose any layout, padding, or background of its own, so it drops
-into any design system.
+### `leaveBehavior`
+
+With a short `transitionDuration` the three options are hard to tell apart.
+Raise it to `700` and the difference is obvious.
+
+- `fade` — the glow stays where the cursor crossed the edge and fades out
+  there. A light left behind, which is sometimes the effect you want.
+- `instant` — the glow disappears the moment the cursor leaves, whatever
+  `transitionDuration` says. The fade *in* is unaffected.
+- `follow` — the glow keeps tracking the cursor past the edge while it fades,
+  so it slides out of the card instead of stopping at the border.
+
+### `enableTouch`
+
+Off by default, and that default is deliberate. A phone has no cursor to leave
+the card, so the glow would light up on tap and then sit there until something
+else took the pointer. Turn it on only if that is what you want.
+
+## Styling
+
+The component renders a plain `<div>` and imposes no padding, background or
+layout of its own — give it those yourself through `className` or `style`.
+
+Under the hood it sets these custom properties, which you can also set from
+your own CSS if you prefer that to props:
+
+| Property | Set from | Meaning |
+|---|---|---|
+| `--rsc-color` | `spotlightColor` | Glow color |
+| `--rsc-size` | `spotlightSize` | Glow diameter |
+| `--rsc-duration` | `transitionDuration` | Fade duration |
+| `--rsc-radius` | `radius` | Corner radius |
+| `--rsc-x`, `--rsc-y` | pointer | Cursor position inside the card |
+
+Anyone who has asked their system to reduce motion gets the glow without the
+fade; the stylesheet handles that.
+
+## TypeScript
+
+Types ship with the package. `SpotlightCardProps` and `LeaveBehavior` are
+exported if you need them.
+
+```ts
+import type { SpotlightCardProps, LeaveBehavior } from 'react-spotlight-card'
+```
 
 ## Development
 
@@ -73,45 +121,20 @@ into any design system.
 git clone https://github.com/godwire/react-spotlight-card.git
 cd react-spotlight-card
 
-npm install          # installs the library's dev dependencies
-npm run dev          # launches the example app at http://localhost:5173,
-                      # importing the component straight from src/ (no build step)
+npm install
+npm run dev        # playground at http://localhost:5173, importing from src/
 ```
-
-Other useful scripts:
 
 ```bash
-npm run typecheck    # tsc --noEmit
-npm run build         # builds dist/ (ESM + CJS + .d.ts + style.css)
+npm test           # component tests in jsdom
+npm run typecheck  # tsc --noEmit
+npm run build      # dist/: ESM + CJS + .d.ts + style.css
+npm run verify     # all three, and what CI runs
 ```
 
-The `example/` app is a separate Vite project that aliases
-`react-spotlight-card` to `../src/index.ts`, so the demo always reflects
-whatever is currently in `src/` — no linking or rebuilding needed while
-you iterate on the component.
-
-## Deploying the demo
-
-```bash
-cd example
-npm run build
-```
-
-Deploy the resulting `example/dist` folder anywhere static (Vercel,
-Netlify, GitHub Pages). On Vercel: import this repo, set **Root Directory**
-to `example`, framework preset **Vite** — that's it, no environment
-variables needed since the demo has no backend.
-
-## Publishing to npm
-
-```bash
-npm run build
-npm login
-npm publish
-```
-
-`files: ["dist"]` in `package.json` means only the built output is
-published, not the source or the example app.
+The `example/` app aliases `react-spotlight-card` to `../src/index.ts`, so the
+playground always reflects the current source — no linking, no rebuild while
+you iterate.
 
 ## License
 
